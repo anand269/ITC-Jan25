@@ -1,0 +1,187 @@
+package test;
+
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterSuite;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+
+public class Day1 {
+	
+	@BeforeSuite
+	public void bfsuit()
+	{
+		System.out.println("Before suite executed");
+	}
+	
+	@AfterSuite
+	public void afsuit()
+	{
+		System.out.println("After suite executed");
+	}
+	
+	@BeforeTest
+	public void prerequisite()
+	{
+		System.out.println("Before test executed");
+	}
+
+	@AfterTest
+	public void afterteset()
+	{
+		System.out.println("After test executed");
+	}
+	
+	@BeforeClass
+	public void bfclass()
+	{
+		System.out.println("Before class executed");
+	}
+	
+	@AfterClass
+	public void afclss()
+	{
+		System.out.println("After class executed");
+	}
+	
+	@Test (priority = -1)
+	public void Hello() {
+		// TODO Auto-generated method stub
+		System.out.println("Hello, welcome to TestNG");
+	}
+	
+	@Test (priority = 0)
+	public void bye() {
+		// TODO Auto-generated method stub
+		System.out.println("Bye to TestNG");
+	}
+
+	
+	@AfterMethod
+	public void afmethod()
+	{
+		System.out.println("After method executed");
+	}
+	
+	@BeforeMethod
+	public void bfmethod()
+	{
+		System.out.println("Before method executed");
+	}
+
+}
+---------
+package test;
+
+import org.testng.Assert;
+import org.testng.SkipException;
+import org.testng.annotations.Test;
+
+public class Grouping {
+ 
+  @Test (groups = { "smoke" },priority=-2)
+ 
+  public void Car1() {
+ 
+   System.out.println("Batch Car - Test car 1");
+ 
+  }
+ 
+  @Test (groups = {"regression"},priority=-1)
+ 
+  public void Car2() {
+ 
+   System.out.println("Batch Car - Test car 2");
+ 
+  }
+ 
+  @Test (groups = { "regression", "smoke" })
+ 
+  public void Scooter1() {
+ 
+   System.out.println("Batch Scooter - Test scooter 1");
+ 
+  }
+ 
+  @Test (groups = { "regression" })
+ 
+  public void Scooter2() {
+ 
+   System.out.println("Batch Scooter - Test scooter 2");
+ 
+  }
+ 
+  @Test (groups = {"Car",  "Sedan Car"} )
+ 
+  public void Sedan1() {
+ 
+   System.out.println("Batch Sedan Car - Test sedan 1");
+ 
+  }
+  
+  @Test (enabled=true)
+  public void testcase6(){
+     System.out.println("Testcase 6 - skip exception example");
+     throw new SkipException("Skipping this exception");
+  }
+  
+  @Test (enabled = false)
+  public void testcase7(){
+     System.out.println("Testcase 6 - skip exception example");
+     Assert.assertTrue(false);
+  }
+ 
+}
+-----------
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Suite">
+  <test name="Test"> 
+  <groups> 
+     <run> 
+       <include name="regression" />
+     </run> 
+   </groups>
+     
+    <classes>
+      <class name="test.Day2"/>
+       <class name="test.Grouping"/> 
+    </classes>
+  </test> <!-- Test -->
+</suite> <!-- Suite -->
+-------
+package test;
+
+import org.testng.Assert;
+import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
+
+public class SoftAssert {
+	@Test
+	public void testCaseOne() {
+		System.out.println("*** test case one started ***");
+		Assert.assertEquals(5, 5, "First hard assert failed");
+		System.out.println("hard assert success....");
+		Assert.assertTrue("Hello".equals("hello"), "Second hard assert failed");
+		System.out.println("*** test case one executed successfully ***");
+	}
+
+	@Test
+	public void testCasetwo() {
+		SoftAssert softAssert = new SoftAssert();
+		System.out.println("*** test case two started ***");
+		softAssert.assertEquals("Hello", "Hello", "First soft assert failed");
+		System.out.println("hard assert success....");
+		softAssert.assertTrue("Hello".equals("hello"), "Second soft assert failed");
+		softAssert.assertTrue("Welcome".equals("welcomeeee"), "Third soft assert failed");
+		System.out.println("*** test case two executed successfully ***");
+		softAssert.assertAll();
+	}
+
+
+}
+---------
