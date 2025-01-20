@@ -1,0 +1,133 @@
+Setting up BDD (Behavior-Driven Development) with Cucumber in Eclipse involves several steps. Below is a step-by-step guide to set up Cucumber in Eclipse for a Java-based project.
+
+### 1. **Install Eclipse IDE (If not already installed)**
+   Ensure that you have Eclipse installed. You can download the IDE for Java Developers from the official website:  
+   [Download Eclipse IDE](https://www.eclipse.org/downloads/)
+
+### 2. **Install the Cucumber Eclipse Plugin**
+   You can install the Cucumber plugin from the Eclipse marketplace to get features like syntax highlighting and auto-completion for Cucumber feature files.
+
+   - Open Eclipse and go to **Help** > **Eclipse Marketplace**.
+   - In the search box, type **Cucumber** and hit **Go**.
+   - Install the plugin called **Cucumber Eclipse Plugin**.
+   - After installation, restart Eclipse.
+
+### 3. **Create a New Maven Project**
+   Maven is commonly used for managing dependencies in Java projects. Here’s how to create a new Maven project in Eclipse:
+
+   - In Eclipse, go to **File** > **New** > **Maven Project**.
+   - Select **Create a simple project** and click **Next**.
+   - Choose your **Group ID** and **Artifact ID**, then click **Finish**.
+
+### 4. **Add Cucumber Dependencies to `pom.xml`**
+   After creating your Maven project, you need to add the necessary Cucumber dependencies to your `pom.xml` file.
+
+   Open the `pom.xml` file and add the following dependencies inside the `<dependencies>` section:
+
+   ```xml---
+<dependency>
+    <groupId>io.cucumber</groupId>
+    <artifactId>cucumber-java</artifactId>
+    <version>7.11.0</version>
+</dependency>
+<!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-junit -->
+<dependency>
+    <groupId>io.cucumber</groupId>
+    <artifactId>cucumber-junit</artifactId>
+    <version>7.11.0</version>
+    <scope>test</scope>
+</dependency>
+<!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-core -->
+<dependency>
+    <groupId>io.cucumber</groupId>
+    <artifactId>cucumber-core</artifactId>
+    <version>7.11.0</version>
+</dependency>
+   
+   ```
+
+### 5. **Create a Feature File**
+   Cucumber uses `.feature` files to write the BDD scenarios. Here’s how you create a feature file:
+
+   - Right-click on the **src/test/resources** folder (create it if it doesn’t exist).
+   - Select **New** > **File** and name it `yourFeature.feature`.
+   - Add your BDD scenarios in the feature file using Gherkin syntax:
+
+     Example (`yourFeature.feature`):
+     ```gherkin
+     Feature: Login functionality
+
+         Scenario: Successful login with valid credentials
+             Given I am on the login page
+             When I enter valid username and password
+             Then I should be redirected to the homepage
+     ```
+
+### 6. **Create Step Definitions**
+   Step definitions connect the steps in your feature file to the actual code that executes them.
+
+   - In the `src/test/java` folder, create a new Java class, e.g., `StepDefinitions.java`.
+   - Annotate the methods with Cucumber’s `@Given`, `@When`, and `@Then` annotations to map the steps in your feature file.
+
+     Example (`StepDefinitions.java`):
+     ```java
+     import io.cucumber.java.en.Given;
+     import io.cucumber.java.en.When;
+     import io.cucumber.java.en.Then;
+
+     public class StepDefinitions {
+
+         @Given("I am on the login page")
+         public void iAmOnLoginPage() {
+             // Code to navigate to login page
+             System.out.println("Navigating to the login page...");
+         }
+
+         @When("I enter valid username and password")
+         public void iEnterValidCredentials() {
+             // Code to enter username and password
+             System.out.println("Entering username and password...");
+         }
+
+         @Then("I should be redirected to the homepage")
+         public void iShouldBeRedirected() {
+             // Code to verify redirection
+             System.out.println("Verifying redirection to homepage...");
+         }
+     }
+     ```
+
+### 7. **Create the Cucumber Test Runner**
+   To run the Cucumber tests, create a test runner class that will execute the scenarios.
+
+   - In the `src/test/java` folder, create a new class, e.g., `TestRunner.java`.
+   - Annotate the class with `@RunWith(Cucumber.class)` and specify the location of the feature files.
+
+     Example (`TestRunner.java`):
+     ```java
+     import org.junit.runner.RunWith;
+     import io.cucumber.junit.Cucumber;
+     import io.cucumber.junit.CucumberOptions;
+
+     @RunWith(Cucumber.class)
+     @CucumberOptions(
+         features = "src/test/resources/<feature-file.feature>",
+         glue = "stepDefinitions",  // Path to your step definition package
+         plugin = {"pretty", "html:target/cucumber-reports"}
+     )
+     public class TestRunner {
+     }
+     ```
+
+### 8. **Run the Tests**
+   To run your Cucumber tests:
+   - Right-click on the `TestRunner` class.
+   - Select **Run As** > **JUnit Test**.
+   - Cucumber will execute the steps and generate reports (e.g., `html:target/cucumber-reports`).
+
+### 9. **View Cucumber Reports**
+   After running the tests, you can view the Cucumber HTML reports in the `target/cucumber-reports` directory in your project.
+
+---
+
+This should set up a basic BDD Cucumber project in Eclipse. You can extend it by adding more features, step definitions, and utilizing different reporting formats based on your needs.
